@@ -26,6 +26,12 @@ export class DialogSystem extends Component {
 
     onLoad(){
         input.on(Input.EventType.MOUSE_DOWN,  this.onClickBox, this);
+        input.on(Input.EventType.TOUCH_START, this.onClickBox, this);
+    }
+
+    onDestroy(){
+        input.off(Input.EventType.MOUSE_DOWN,  this.onClickBox, this);
+        input.off(Input.EventType.TOUCH_START, this.onClickBox, this);
     }
 
     onClickBox(){
