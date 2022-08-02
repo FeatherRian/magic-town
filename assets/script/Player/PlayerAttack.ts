@@ -1,12 +1,13 @@
 import { _decorator, Component, Node } from 'cc';
 import { Click } from '../MiniGames/Click'
+import { Punch } from '../MiniGames/Punch';
 import { DialogSystem } from '../UI/DialogSystem';
 import { MiniGame, Player } from './Player';
 const { ccclass, property } = _decorator;
 
 @ccclass('PlayerAttack')
 export class PlayerAttack extends Component {
-    @property (Click) clickGame : Click = null;
+    @property (Punch) PunchGame : Punch = null;
     @property (DialogSystem) dialogSystem : DialogSystem = null;
     @property(Player) player : Player = null;
 
@@ -32,7 +33,7 @@ export class PlayerAttack extends Component {
     }
     
     Game1Start(){
-        this.dialogSystem.EnterDialog(0.05 , ["在规定时间内点击屏幕，次数越多，伤害越高"] , this.clickGame.GameStart.bind(this.clickGame));
+        this.dialogSystem.EnterDialog(0.05 , ["在规定时间内轮流点击两侧拳套，重复点击同一拳套会直接结束游戏"] , this.PunchGame.GameStart.bind(this.PunchGame));
     }
 
     Game2Start(){

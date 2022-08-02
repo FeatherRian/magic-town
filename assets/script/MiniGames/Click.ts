@@ -1,13 +1,12 @@
 import { _decorator, Component, Node, Label , EventMouse , Input , input} from 'cc';
 import { RoundSystem } from '../GameManager/RoundSystem';
 import { DialogSystem } from '../UI/DialogSystem';
+import { Health } from '../UI/Health';
 const { ccclass, property } = _decorator;
 
 @ccclass('Click')
 export class Click extends Component {
     
-    @property(RoundSystem) roundSystem : RoundSystem = null;
-    @property(DialogSystem) dialogSystem : DialogSystem = null;
     @property(Node) background : Node = null;
     @property(Node) gameNode : Node = null; 
     @property(Label) clicks : Label = null;
@@ -15,11 +14,13 @@ export class Click extends Component {
     @property targetClicks : number = 0;
     @property maxTime : number = 0;
 
+    @property(Health) playerHealth : Health = null;
+    @property damagePerClick : number = 0;
+
     private gameStart : boolean = false;
     private currClicks : number = 0;
     private currTime : number = 0;
     private timeRecorder : Function = null;
-    private timeCount : number = 0;
     
     onEnable(){
         input.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
@@ -74,11 +75,7 @@ export class Click extends Component {
         this.background.active = false;
         this.gameNode.active = false;
         this.gameStart = false;
-        if (this.roundSystem.playerRound){
-            this.dialogSystem.EnterDialog(0.05 , ["你一共获得"+this.currClicks+"分"] , this.roundSystem.EnemyRoundBegin.bind(this.roundSystem));
-        } else {
-            this.dialogSystem.EnterDialog(0.05 , ["你一共获得"+this.currClicks+"分"] , this.roundSystem.PlayerRoundBegin.bind(this.roundSystem));
-        }
+        this.playerHealth.injured((this.targetClicks-this.currClicks) * this.damagePerClick);
     }
 
 }
