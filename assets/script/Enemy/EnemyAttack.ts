@@ -1,5 +1,6 @@
 import { _decorator, Component, Node } from 'cc';
 import { Click } from '../MiniGames/Click';
+import { Whac_a_mole } from '../MiniGames/Whac-a-mole';
 import { DialogSystem } from '../UI/DialogSystem';
 import { Enemy, EnemyType } from './Enemy';
 const { ccclass, property } = _decorator;
@@ -10,6 +11,7 @@ export class EnemyAttack extends Component {
     @property (Enemy) enemy : Enemy = null;
 
     @property (Click) clickGame : Click = null;
+    @property (Whac_a_mole) whac_a_mole :Whac_a_mole = null;
     @property (DialogSystem) dialogSystem : DialogSystem = null;
 
     ChooseGame(){
@@ -38,7 +40,7 @@ export class EnemyAttack extends Component {
     }
 
     Game2Start(){
-
+        this.dialogSystem.EnterDialog(0.05 , ["在规定时间内打地鼠，次数越多，受到伤害越低"] , this.whac_a_mole.GameStart.bind(this.whac_a_mole));
     }
 
     Game3Start(){
