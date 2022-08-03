@@ -1,4 +1,4 @@
-import { _decorator, Component, Node , Label, input , Input, RichText, TextAsset } from 'cc';
+import { _decorator, Component, Node , Label, input , Input, TextAsset } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('DialogSystem')
@@ -7,7 +7,7 @@ export class DialogSystem extends Component {
     @property playSpeed:number = 0;
     private speed: number;
 
-    @property(RichText) dialogLabel : RichText = null;
+    @property(Label) dialogLabel : Label = null;
     @property(Node) dialogNode : Node = null;
     private contentStr : string = "";
     private currTextIndex : number = 0;
