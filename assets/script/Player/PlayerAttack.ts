@@ -1,6 +1,5 @@
 import { _decorator, Component, Node } from 'cc';
-import { Click } from '../MiniGames/Click'
-import { Punch } from '../MiniGames/Punch';
+import { Punch } from '../MiniGames/Punch/Punch';
 import { DialogSystem } from '../UI/DialogSystem';
 import { MiniGame, Player } from './Player';
 const { ccclass, property } = _decorator;

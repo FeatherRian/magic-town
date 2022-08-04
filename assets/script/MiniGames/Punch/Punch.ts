@@ -1,7 +1,7 @@
 import { _decorator, Component, Node, Label, Enum, Sprite, resources, SpriteFrame } from 'cc';
-import { RoundSystem } from '../GameManager/RoundSystem';
-import { DialogSystem } from '../UI/DialogSystem';
-import { Health } from '../UI/Health';
+import { RoundSystem } from '../../GameManager/RoundSystem';
+import { DialogSystem } from '../../UI/DialogSystem';
+import { Health } from '../../UI/Health';
 const { ccclass, property } = _decorator;
 
 

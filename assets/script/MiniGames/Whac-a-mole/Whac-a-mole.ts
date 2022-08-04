@@ -1,5 +1,5 @@
 import { _decorator, Component, Node, Prefab, misc, Label, instantiate, resources } from 'cc';
-import { Health } from '../UI/Health';
+import { Health } from '../../UI/Health';
 const { ccclass, property } = _decorator;
 
 @ccclass('Whac_a_mole')
