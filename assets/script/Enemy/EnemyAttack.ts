@@ -1,6 +1,7 @@
 import { _decorator, Component, Node } from 'cc';
-import { Click } from '../MiniGames/Click';
-import { Whac_a_mole } from '../MiniGames/Whac-a-mole';
+import { Click } from '../MiniGames/Click/Click';
+import { Link } from '../MiniGames/Link/Link';
+import { Whac_a_mole } from '../MiniGames/Whac-a-mole/Whac-a-mole';
 import { DialogSystem } from '../UI/DialogSystem';
 import { Enemy, EnemyType } from './Enemy';
 const { ccclass, property } = _decorator;
@@ -10,6 +11,7 @@ export class EnemyAttack extends Component {
     
     @property (Enemy) enemy : Enemy = null;
 
+    @property (Link) link : Link = null;
     @property (Click) clickGame : Click = null;
     @property (Whac_a_mole) whac_a_mole :Whac_a_mole = null;
     @property (DialogSystem) dialogSystem : DialogSystem = null;
@@ -44,7 +46,7 @@ export class EnemyAttack extends Component {
     }
 
     Game3Start(){
-
+        this.dialogSystem.EnterDialog(0.05 , ["在规定时间内进行连连看，剩下的方块越少，受到伤害越低"], this.link.GameStart.bind(this.link));
     }
 
     Game4Start(){
