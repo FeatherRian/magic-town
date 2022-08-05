@@ -1,5 +1,6 @@
 import { _decorator, Component, Node, Prefab, misc, Label, instantiate, resources } from 'cc';
 import { Health } from '../../UI/Health';
+import { Gopher } from './Gopher';
 const { ccclass, property } = _decorator;
 
 @ccclass('Whac_a_mole')
@@ -64,7 +65,7 @@ export class Whac_a_mole extends Component {
         let newNode : Node = instantiate(this.gopher);
         this.gameNode.addChild(newNode);
         newNode.setPosition( (Math.random() - 0.5) * 480 , (Math.random() - 0.5) * 480);
-        newNode.getComponent('Gopher').whac_a_mole = this;
+        newNode.getComponent(Gopher).whac_a_mole = this;
     }
 
     ExitGame(){

@@ -36,6 +36,7 @@ export class Tile extends Component {
 
     IsLink(){
         this.node.active = false ;
+        this.node.destroy();
     }
 }
 
