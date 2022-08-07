@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Prefab, misc, Label, instantiate, resources } from 'cc';
+import { _decorator, Component, Node, Prefab, misc, Label, instantiate, resources, Sprite } from 'cc';
 import { Health } from '../../UI/Health';
 import { Gopher } from './Gopher';
 const { ccclass, property } = _decorator;
@@ -10,17 +10,17 @@ export class Whac_a_mole extends Component {
     @property(Node) background : Node = null;
     @property(Node) gameNode : Node = null; 
     @property(Label) clicks : Label = null;
-    @property(Label) time : Label = null;
     @property targetClicks : number = 0;
-    @property maxTime : number = 0;
 
     @property(Health) playerHealth : Health = null;
     @property damagePerClick : number = 0;
 
+    @property([Node]) holeNode : Node[] = [];
+
     private gameStart : boolean = false;
     private currClicks : number = 0;
-    private currTime : number = 0;
-    private timeRecorder : Function = null;
+    private currGopher : number = 0;
+    private gopherEscape : Function = null;
 
     start(){
         resources.load("prefab/Gopher" , Prefab , (err, prefab) => {
@@ -30,8 +30,7 @@ export class Whac_a_mole extends Component {
     update(deltaTime: number) {
         if (!this.gameStart)    return;
         this.clicks.string = "当前击打地鼠："+ this.currClicks + "/" + this.targetClicks;
-        this.time.string = "剩余时间：" + this.currTime + "s";
-        if ((this.currClicks >= this.targetClicks)||(this.currTime <= 0))
+        if (this.currGopher == this.targetClicks)
         {
             this.ExitGame();
         }
@@ -40,36 +39,40 @@ export class Whac_a_mole extends Component {
     GameStart(){
         // console.log(this.name);
         this.currClicks = 0;
-        this.currTime = this.maxTime;
+        this.currGopher = 0;
         this.background.active = true;
         this.gameNode.active = true;
         this.gameStart = true;
-
-        this.timeRecorder = () => {
-            if (this.currTime == 0){
-                this.unschedule(this.timeRecorder);
-            }
-            this.currTime--;
-        }
-        this.schedule(this.timeRecorder, 1);
         this.InitGopher();
 
     }
 
     HitGopher(){
         this.currClicks ++ ;
-        this.InitGopher();
+        this.currGopher ++ ;
+        this.unschedule(this.gopherEscape);
+        this.scheduleOnce(function(){
+            this.InitGopher();
+        } , Math.random()*1.5+1.5 );
     }
 
     InitGopher(){
+        let holeNumber : number = Math.floor(Math.random()*6);
         let newNode : Node = instantiate(this.gopher);
-        this.gameNode.addChild(newNode);
-        newNode.setPosition( (Math.random() - 0.5) * 480 , (Math.random() - 0.5) * 480);
+        // newNode.setPosition(this.holeNode[holeNumber].position);
+        this.holeNode[holeNumber].addChild(newNode);  
         newNode.getComponent(Gopher).whac_a_mole = this;
+
+        this.gopherEscape = function(){
+            newNode.destroy();
+            this.currGopher ++ ;
+            this.InitGopher();
+        }
+
+        this.scheduleOnce(this.gopherEscape , 1.5);
     }
 
     ExitGame(){
-        this.unschedule(this.timeRecorder);
         this.background.active = false;
         this.gameNode.active = false;
         this.gameStart = false;
