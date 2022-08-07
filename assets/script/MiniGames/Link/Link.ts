@@ -26,6 +26,7 @@ export class Link extends Component {
     private tiles : Tile[][] = [];
     private tileData : number[][] = [];
     private lastClickTile : Tile = null;
+    private waiting : boolean = false;
 
     start() {
         resources.load("prefab/TilePrefab" , Prefab , (err, prefab) => {
@@ -92,7 +93,7 @@ export class Link extends Component {
                 if (count == 2){
                     count = 0;
                     type++;
-                    if (type == 10){
+                    if (type == 8){
                         type = 0;
                     }
                 }
@@ -126,27 +127,42 @@ export class Link extends Component {
 
     OnTileClick(tile : Tile){
 
+        if (this.waiting) return;
+
         if (tile.isSelected){
             tile.SetIsSelected(false);
             this.lastClickTile = null;
             return;
         }
 
+        tile.SetIsSelected(true);
+
         if (!this.lastClickTile){
-            tile.SetIsSelected(true);
             this.lastClickTile = tile;
             return;
         }
+
+        this.waiting = true;
         
         if (this.lastClickTile.type == tile.type){
-            this.lastClickTile.IsLink();
-            this.lastClickTile = null;
-            tile.IsLink();
-            this.remainTile -= 2;
+            this.scheduleOnce(function(){
+                //播放消失动画
+                this.lastClickTile.IsLink();
+                this.lastClickTile = null;
+                tile.IsLink();
+                this.remainTile -= 2;
+            } , 0.5);
         } else {
-            this.lastClickTile.SetIsSelected(false);
-            this.lastClickTile = null;
+            this.scheduleOnce(function(){
+                this.lastClickTile.SetIsSelected(false);
+                tile.SetIsSelected(false);
+                this.lastClickTile = null;
+            } , 0.5 );
         }
+
+        this.scheduleOnce(function(){
+            this.waiting = false;
+        }, 1 );
 
     }
 

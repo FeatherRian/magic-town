@@ -254,7 +254,7 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 480,
+      "x": 479.99999999999994,
       "y": 320,
       "z": 0
     },
@@ -707,8 +707,8 @@
     "__prefab": null,
     "_alignFlags": 45,
     "_target": null,
-    "_left": 0,
-    "_right": 0,
+    "_left": -5.684341886080802e-14,
+    "_right": -5.684341886080802e-14,
     "_top": 0,
     "_bottom": 0,
     "_horizontalCenter": 0,
@@ -4775,7 +4775,7 @@
     "time": {
       "__id__": 95
     },
-    "maxTime": 10,
+    "maxTime": 6,
     "punchSprite1": {
       "__id__": 82
     },
@@ -4785,7 +4785,7 @@
     "enemyHealth": {
       "__id__": 137
     },
-    "damagePerPunch": 10,
+    "damagePerPunch": 20,
     "_id": "0aI4qR62hC5720xg34VEVu"
   },
   {
@@ -4858,13 +4858,13 @@
     "time": {
       "__id__": 108
     },
-    "maxTime": 60,
-    "line": 8,
-    "cross": 10,
+    "maxTime": 45,
+    "line": 4,
+    "cross": 4,
     "playerHealth": {
       "__id__": 117
     },
-    "damagePerTile": 20,
+    "damagePerTile": 100,
     "spaceX": 60,
     "spaceY": 60,
     "_id": "30QbxlLHFHFr8c3FMaaKnM"
@@ -5484,7 +5484,7 @@
     "_enabled": true,
     "__prefab": null,
     "enemyName": "EnemyTest",
-    "enemyType": 3,
+    "enemyType": 2,
     "enemyMaxHealth": 2000,
     "enemyCurrHealth": 2000,
     "enemySprite": {

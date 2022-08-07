@@ -1,7 +1,6 @@
 import { _decorator, Component, Node } from 'cc';
 import { Click } from '../MiniGames/Click/Click';
 import { Link } from '../MiniGames/Link/Link';
-import { NumberBoard } from '../MiniGames/NumberBoard/NumberBoard';
 import { Whac_a_mole } from '../MiniGames/Whac-a-mole/Whac-a-mole';
 import { DialogSystem } from '../UI/DialogSystem';
 import { Enemy, EnemyType } from './Enemy';
@@ -15,7 +14,6 @@ export class EnemyAttack extends Component {
     @property (Link) link : Link = null;
     @property (Click) clickGame : Click = null;
     @property (Whac_a_mole) whac_a_mole : Whac_a_mole = null;
-    @property (NumberBoard) numberBoard : NumberBoard = null;
     @property (DialogSystem) dialogSystem : DialogSystem = null;
     
 
@@ -49,11 +47,11 @@ export class EnemyAttack extends Component {
     }
 
     Game3Start(){
-        this.dialogSystem.EnterDialog(0.05 , ["在规定时间内进行连连看，剩下的方块越少，受到伤害越低"], this.link.GameStart.bind(this.link));
+        this.dialogSystem.EnterDialog(0.05 , ["在规定时间内进行翻牌连连看，剩下的方块越少，受到伤害越低"], this.link.GameStart.bind(this.link));
     }
 
     Game4Start(){
-        this.dialogSystem.EnterDialog(0.05, ["在规定时间内记住排序，并在牌子翻回去之后按顺序点击数字"], this.numberBoard.GameStart.bind(this.numberBoard));
+        
     }
 
     Game5Start(){
