@@ -1,6 +1,6 @@
 import { _decorator, Component, Node } from 'cc';
-import { Click } from '../MiniGames/Click/Click';
 import { Link } from '../MiniGames/Link/Link';
+import { MagicHat } from '../MiniGames/Magic Hat/MagicHat';
 import { Whac_a_mole } from '../MiniGames/Whac-a-mole/Whac-a-mole';
 import { DialogSystem } from '../UI/DialogSystem';
 import { Enemy, EnemyType } from './Enemy';
@@ -9,12 +9,18 @@ const { ccclass, property } = _decorator;
 @ccclass('EnemyAttack')
 export class EnemyAttack extends Component {
     
-    @property (Enemy) enemy : Enemy = null;
+    
 
+    @property (MagicHat) magicHat : MagicHat = null;
     @property (Link) link : Link = null;
-    @property (Click) clickGame : Click = null;
     @property (Whac_a_mole) whac_a_mole : Whac_a_mole = null;
     @property (DialogSystem) dialogSystem : DialogSystem = null;
+    
+    private enemy : Enemy = null;
+
+    start(){
+        this.enemy = this.getComponent(Enemy);
+    }
     
 
     ChooseGame(){
@@ -39,7 +45,7 @@ export class EnemyAttack extends Component {
     }
     
     Game1Start(){
-        this.dialogSystem.EnterDialog(0.05 , ["在规定时间内点击屏幕，次数越多，受到伤害越低"] , this.clickGame.GameStart.bind(this.clickGame));
+        this.dialogSystem.EnterDialog(0.05 , ["盯紧有兔子的魔术帽，并在帽子停止移动后找出它"] , this.magicHat.GameStart.bind(this.magicHat));
     }
 
     Game2Start(){
