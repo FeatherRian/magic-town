@@ -39,7 +39,11 @@ export class PlayerAttack extends Component {
     }
 
     Game2Start(){
-        this.dialogSystem.EnterDialog(0.05, ["进行俄罗斯方块，每回合获得5个方块"], this.tetris.GameStart.bind(this.tetris));
+        if (this.tetris.gameStart){
+            this.dialogSystem.EnterDialog(0.05, ["继续俄罗斯方块，每回合获得5个方块"], this.tetris.ThisRoundStart.bind(this.tetris));
+        } else {
+            this.dialogSystem.EnterDialog(0.05, ["进行俄罗斯方块，每回合获得5个方块"], this.tetris.GameStart.bind(this.tetris));
+        }
     }
 
     Game3Start(){

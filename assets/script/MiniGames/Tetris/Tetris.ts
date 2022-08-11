@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Prefab, Vec2, instantiate, v2, v3, input, Input, EventKeyboard, KeyCode } from 'cc';
+import { _decorator, Component, Node, Prefab, Vec2, instantiate, v2, v3, input, Input, EventKeyboard, KeyCode, Label } from 'cc';
 import { Health } from '../../UI/Health';
 const { ccclass, property } = _decorator;
 
@@ -9,6 +9,8 @@ export class Tetris extends Component {
     @property(Node) gameNode : Node = null;
     @property(Health) enemyHealth : Health = null;
     @property blockLength : number = 0;
+    @property damagePerScore : number = 0;
+    @property(Label) scoreLabel : Label = null;
 
     private box : Node[][] = [];
     private rand : number = 0;
@@ -25,34 +27,53 @@ export class Tetris extends Component {
     private currentBlockPart03Pos: Vec2 = null;
     private currentBlockPart04Pos: Vec2 = null;
 
-    private gameStart : boolean = false;
+    public gameStart : boolean = false;
     private remainBlock : number = 0;
+    private score : number = 0;
 
-    onKeyDown(event : EventKeyboard){
-        switch (event.keyCode) {
-            case KeyCode.ARROW_LEFT:
-                this.LeftButton();
-                break;
-            case KeyCode.ARROW_RIGHT:
-                this.RightButton();
-                break;
-            case KeyCode.ARROW_UP:
-                this.UpButton();
-                break;
-            case KeyCode.ARROW_DOWN:
-                this.DownButton();
-                break;
-        }
+    private autoDown : Function = null;
+
+    // onKeyDown(event : EventKeyboard){
+    //     switch (event.keyCode) {
+    //         case KeyCode.ARROW_LEFT:
+    //             this.LeftButton();
+    //             break;
+    //         case KeyCode.ARROW_RIGHT:
+    //             this.RightButton();
+    //             break;
+    //         case KeyCode.ARROW_UP:
+    //             this.UpButton();
+    //             break;
+    //         case KeyCode.ARROW_DOWN:
+    //             this.DownButton();
+    //             break;
+    //     }
+    // }
+
+    update(){
+        this.scoreLabel.string = "当前得分：" + this.score;
     }
 
     GameStart(){
-        input.on(Input.EventType.KEY_DOWN, this.onKeyDown , this);
+        // input.on(Input.EventType.KEY_DOWN, this.onKeyDown , this);
 
         this.background.active = true;
         this.gameNode.active = true;
         this.gameStart = true;
+        this.remainBlock = 5;
+        this.score = 0;
 
         this.InitBox();
+        this.AutoDown();
+    }
+
+    ThisRoundStart(){
+        this.background.active = true;
+        this.gameNode.active = true;
+        this.remainBlock = 5;
+        this.score = 0;
+
+        this.BuildBlock();
         this.AutoDown();
     }
 
@@ -68,6 +89,12 @@ export class Tetris extends Component {
     }
 
     BuildBlock() {
+        if (this.remainBlock == 0){
+            this.ThisRoundEnd();
+            return;
+        }
+        this.remainBlock--;
+        
         this.rand = Math.floor(7 * Math.random());
         this.ChooseColor(this.rand);
         this.ChooseType(this.rand);
@@ -247,13 +274,14 @@ export class Tetris extends Component {
     }
 
     AutoDown() {
-        this.schedule(() => {
+        this.autoDown = () => {
             //一直下落直到碰到下边界
             if (this.isClashBottom()) {
                 this.deleteRow();   //行消除检测
                 this.BuildBlock();  //创建新的方块集合
             } else if (this.isClashBlockDown()) {   //一直下落直到碰到其他方块
                 this.isGameOver();  //判断游戏是否结束
+                if (!this.gameStart) return;
                 this.deleteRow();
                 this.BuildBlock();
             } else {
@@ -265,7 +293,8 @@ export class Tetris extends Component {
                 this.currentBlockPart04Pos.x -= 1;
                 this.CheckCurrentBlockPos();
             }
-        }, 1);
+        }
+        this.schedule(this.autoDown , 1);
     }
 
     LeftButton(){
@@ -575,6 +604,7 @@ export class Tetris extends Component {
     }
 
     deleteRow() {
+        let row = 0;
         for (let i = 0; i < 18; i++) {
             let count = 0;
             for (let j = 0; j < 10; j++) {
@@ -583,6 +613,7 @@ export class Tetris extends Component {
                 }
             }
             if (count == 10) {
+                row++;
                 for (let j = 0; j < 10; j++) {
                     this.box[i][j].removeFromParent();
                     this.box[i][j] = null;
@@ -590,6 +621,20 @@ export class Tetris extends Component {
                 this.rowDown(i);
                 i--;
             }
+        }
+
+        switch(row){
+            case 1: 
+                this.score += 1;
+                break;
+            case 2:
+                this.score += 3;
+                break;
+            case 3:
+                this.score += 5;
+                break;
+            case 4:
+                this.score += 8;
         }
     }
 
@@ -625,12 +670,34 @@ export class Tetris extends Component {
         }
     }
 
+    ThisRoundEnd(){
+        this.unschedule(this.autoDown);
+        this.background.active = false;
+        this.gameNode.active = false;
+        
+        this.enemyHealth.injured(this.score * this.damagePerScore);
+    }
+
     ExitGame(){
         
-        input.off(Input.EventType.KEY_DOWN, this.onKeyDown , this);
+        // input.off(Input.EventType.KEY_DOWN, this.onKeyDown , this);
+
+        //失败时清空当前场面
+        for (let i = 0; i < 20; i++) {
+            for (let j = 0; j < 10; j++) {
+                if (this.box[i][j] != null){
+                    this.box[i][j].removeFromParent();
+                    this.box[i][j] = null;
+                }
+            }
+        }
+
+        this.unschedule(this.autoDown);
         this.background.active = false;
         this.gameNode.active = false;
         this.gameStart = false;
+        
+        this.enemyHealth.injured(this.score * this.damagePerScore);
 
     }
 }
