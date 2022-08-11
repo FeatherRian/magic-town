@@ -1,4 +1,5 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, find } from 'cc';
+import { RoundSystem } from '../GameManager/RoundSystem';
 import { Link } from '../MiniGames/Link/Link';
 import { MagicHat } from '../MiniGames/Magic Hat/MagicHat';
 import { Whac_a_mole } from '../MiniGames/Whac-a-mole/Whac-a-mole';
@@ -15,11 +16,13 @@ export class EnemyAttack extends Component {
     @property (Link) link : Link = null;
     @property (Whac_a_mole) whac_a_mole : Whac_a_mole = null;
     @property (DialogSystem) dialogSystem : DialogSystem = null;
+    @property (RoundSystem) roundSystem : RoundSystem = null;
     
     private enemy : Enemy = null;
 
     start(){
         this.enemy = this.getComponent(Enemy);
+        this.roundSystem = find("GameManager").getComponent(RoundSystem);
     }
     
 
@@ -61,7 +64,11 @@ export class EnemyAttack extends Component {
     }
 
     Game5Start(){
+        this.SkipRound();
+    }
 
+    SkipRound(){
+        this.roundSystem.PlayerRoundBegin.bind(this.roundSystem)();
     }
 }
 
