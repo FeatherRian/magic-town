@@ -46,6 +46,8 @@ export class MagicHat extends Component {
         this.background.active = true;
         this.gameNode.active = true;
         this.gameStart = true;
+        this.exchangeEnd = false;
+        this.currExchange = 0;
 
         this.InitHats();
 
@@ -106,19 +108,22 @@ export class MagicHat extends Component {
 
         this.hats[ID1].SetTargetX(this.hats[ID2].node.position.x);
         this.hats[ID2].SetTargetX(this.hats[ID1].node.position.x);
-        if (this.currExchange < this.exchangeTimes){
+        if (this.currExchange < this.exchangeTimes ){
             this.currExchange++ ;
             this.scheduleOnce(function(){
                 this.ExchangeHat();
             } , Math.abs(this.hats[ID1].node.position.x - this.hats[ID2].node.position.x) / this.exchangeSpeed + this.waitDuration);
-        } else { 
-            this.exchangeEnd = true;
+        } else {    
+            this.scheduleOnce(function(){
+                this.exchangeEnd = true;
+            } , Math.abs(this.hats[ID1].node.position.x - this.hats[ID2].node.position.x) / this.exchangeSpeed + this.waitDuration);
         }
 
     }
 
     HatClick(hat : Hat){
         if (!this.exchangeEnd) return;
+        this.exchangeEnd = false;
 
         this.SetRabbit();
         hat.SetTargetY(this.high);
@@ -138,6 +143,7 @@ export class MagicHat extends Component {
         for (let i = 0; i < this.hatNumber ; i++){
             this.hats[i].node.destroy();
         }
+        this.rabbit.destroy();
         
         this.background.active = false;
         this.gameNode.active = false;
