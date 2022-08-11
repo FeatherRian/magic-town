@@ -24,11 +24,11 @@
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 168
+      "__id__": 174
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 169
+      "__id__": 175
     },
     "_id": "09b1c729-1e27-4eba-91f0-73df9c5d384f"
   },
@@ -112,25 +112,25 @@
     },
     "_children": [
       {
-        "__id__": 151
+        "__id__": 157
       },
       {
-        "__id__": 154
+        "__id__": 160
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 165
+        "__id__": 171
       },
       {
-        "__id__": 125
+        "__id__": 130
       },
       {
-        "__id__": 166
+        "__id__": 172
       },
       {
-        "__id__": 167
+        "__id__": 173
       }
     ],
     "_prefab": null,
@@ -174,7 +174,7 @@
         "__id__": 20
       },
       {
-        "__id__": 126
+        "__id__": 131
       },
       {
         "__id__": 4
@@ -189,7 +189,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 150
+        "__id__": 156
       }
     ],
     "_prefab": null,
@@ -2107,10 +2107,10 @@
       "__id__": 54
     },
     "player": {
-      "__id__": 143
+      "__id__": 148
     },
     "playerAttack": {
-      "__id__": 144
+      "__id__": 149
     },
     "_id": "9d4xJhbCVCH7f9KDvlIc51"
   },
@@ -2421,7 +2421,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Game Backgound",
+    "_name": "Game Background",
     "_objFlags": 0,
     "_parent": {
       "__id__": 70
@@ -2430,10 +2430,10 @@
     "_active": false,
     "_components": [
       {
-        "__id__": 148
+        "__id__": 154
       },
       {
-        "__id__": 149
+        "__id__": 155
       }
     ],
     "_prefab": null,
@@ -2487,24 +2487,30 @@
       },
       {
         "__id__": 119
+      },
+      {
+        "__id__": 123
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 123
+        "__id__": 128
       },
       {
-        "__id__": 124
+        "__id__": 129
       },
       {
-        "__id__": 145
+        "__id__": 151
       },
       {
-        "__id__": 146
+        "__id__": 152
       },
       {
-        "__id__": 147
+        "__id__": 153
+      },
+      {
+        "__id__": 150
       }
     ],
     "_prefab": null,
@@ -4372,6 +4378,180 @@
     "_id": "e2Vtl9CfdD3I/YR9mqlGuw"
   },
   {
+    "__type__": "cc.Node",
+    "_name": "Tetris",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 70
+    },
+    "_children": [
+      {
+        "__id__": 124
+      }
+    ],
+    "_active": false,
+    "_components": [
+      {
+        "__id__": 127
+      }
+    ],
+    "_prefab": null,
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_layer": 33554432,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": "f4mXE9LQZFo6Atavs/P9lX"
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "Background",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 123
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 125
+      },
+      {
+        "__id__": 126
+      }
+    ],
+    "_prefab": null,
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_layer": 33554432,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": "b4ok3eRVRGWJNvOEVXD+bm"
+  },
+  {
+    "__type__": "cc.UITransform",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 124
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 300,
+      "height": 600
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_id": "d2gz1rDwZKyaURg0yEihA4"
+  },
+  {
+    "__type__": "cc.Sprite",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 124
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "_visFlags": 0,
+    "_customMaterial": null,
+    "_srcBlendFactor": 2,
+    "_dstBlendFactor": 4,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_spriteFrame": {
+      "__uuid__": "7d8f9b89-4fd1-4c9f-a3ab-38ec7cded7ca@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "_type": 0,
+    "_fillType": 0,
+    "_sizeMode": 0,
+    "_fillCenter": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_fillStart": 0,
+    "_fillRange": 0,
+    "_isTrimmedMode": true,
+    "_useGrayscale": false,
+    "_atlas": null,
+    "_id": "c7RYJ1BuNHYIX/gdsinjaR"
+  },
+  {
+    "__type__": "cc.UITransform",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 123
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 100,
+      "height": 100
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_id": "9fWR//x7ROsbasJ/TCfWI2"
+  },
+  {
     "__type__": "cc.UITransform",
     "_name": "",
     "_objFlags": 0,
@@ -4421,7 +4601,7 @@
       "__id__": 79
     },
     "enemyHealth": {
-      "__id__": 125
+      "__id__": 130
     },
     "damagePerPunch": 20,
     "_id": "0aI4qR62hC5720xg34VEVu"
@@ -4442,7 +4622,7 @@
       "__id__": 3
     },
     "playerNode": {
-      "__id__": 126
+      "__id__": 131
     },
     "enemyNode": {
       "__id__": 4
@@ -4458,25 +4638,25 @@
     },
     "_children": [
       {
-        "__id__": 127
+        "__id__": 132
       },
       {
-        "__id__": 130
+        "__id__": 135
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 142
+        "__id__": 147
       },
       {
-        "__id__": 141
+        "__id__": 146
       },
       {
-        "__id__": 143
+        "__id__": 148
       },
       {
-        "__id__": 144
+        "__id__": 149
       }
     ],
     "_prefab": null,
@@ -4513,16 +4693,16 @@
     "_name": "Player Sprite",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 126
+      "__id__": 131
     },
     "_children": [],
     "_active": true,
     "_components": [
       {
-        "__id__": 128
+        "__id__": 133
       },
       {
-        "__id__": 129
+        "__id__": 134
       }
     ],
     "_prefab": null,
@@ -4559,7 +4739,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 127
+      "__id__": 132
     },
     "_enabled": true,
     "__prefab": null,
@@ -4580,7 +4760,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 127
+      "__id__": 132
     },
     "_enabled": true,
     "__prefab": null,
@@ -4619,29 +4799,29 @@
     "_name": "Health Bar",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 126
+      "__id__": 131
     },
     "_children": [
       {
-        "__id__": 131
+        "__id__": 136
       },
       {
-        "__id__": 134
+        "__id__": 139
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 137
+        "__id__": 142
       },
       {
-        "__id__": 138
+        "__id__": 143
       },
       {
-        "__id__": 139
+        "__id__": 144
       },
       {
-        "__id__": 140
+        "__id__": 145
       }
     ],
     "_prefab": null,
@@ -4678,16 +4858,16 @@
     "_name": "Bar",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 130
+      "__id__": 135
     },
     "_children": [],
     "_active": true,
     "_components": [
       {
-        "__id__": 132
+        "__id__": 137
       },
       {
-        "__id__": 133
+        "__id__": 138
       }
     ],
     "_prefab": null,
@@ -4724,7 +4904,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 131
+      "__id__": 136
     },
     "_enabled": true,
     "__prefab": null,
@@ -4745,7 +4925,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 131
+      "__id__": 136
     },
     "_enabled": true,
     "__prefab": null,
@@ -4784,16 +4964,16 @@
     "_name": "Health",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 130
+      "__id__": 135
     },
     "_children": [],
     "_active": true,
     "_components": [
       {
-        "__id__": 135
+        "__id__": 140
       },
       {
-        "__id__": 136
+        "__id__": 141
       }
     ],
     "_prefab": null,
@@ -4830,7 +5010,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 134
+      "__id__": 139
     },
     "_enabled": true,
     "__prefab": null,
@@ -4851,7 +5031,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 134
+      "__id__": 139
     },
     "_enabled": true,
     "__prefab": null,
@@ -4890,7 +5070,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 130
+      "__id__": 135
     },
     "_enabled": true,
     "__prefab": null,
@@ -4911,7 +5091,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 130
+      "__id__": 135
     },
     "_enabled": true,
     "__prefab": null,
@@ -4950,12 +5130,12 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 130
+      "__id__": 135
     },
     "_enabled": true,
     "__prefab": null,
     "_barSprite": {
-      "__id__": 133
+      "__id__": 138
     },
     "_mode": 0,
     "_totalLength": 250,
@@ -4968,15 +5148,15 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 130
+      "__id__": 135
     },
     "_enabled": true,
     "__prefab": null,
     "health": {
-      "__id__": 141
+      "__id__": 146
     },
     "healthText": {
-      "__id__": 136
+      "__id__": 141
     },
     "_id": "6aTR8qCWFL76cqFVjhcjoz"
   },
@@ -4985,7 +5165,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 126
+      "__id__": 131
     },
     "_enabled": true,
     "__prefab": null,
@@ -4996,7 +5176,7 @@
       "__id__": 3
     },
     "playerNode": {
-      "__id__": 126
+      "__id__": 131
     },
     "enemyNode": {
       "__id__": 4
@@ -5008,7 +5188,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 126
+      "__id__": 131
     },
     "_enabled": true,
     "__prefab": null,
@@ -5029,7 +5209,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 126
+      "__id__": 131
     },
     "_enabled": true,
     "__prefab": null,
@@ -5037,9 +5217,9 @@
     "playerMaxHealth": 1000,
     "playerCurrHealth": 1000,
     "playerSprite": {
-      "__id__": 129
+      "__id__": 134
     },
-    "playerAttack": 0,
+    "playerAttack": 1,
     "_id": "davWEQLgpMy4JwSOy2FCo3"
   },
   {
@@ -5047,20 +5227,74 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 126
+      "__id__": 131
     },
     "_enabled": true,
     "__prefab": null,
-    "PunchGame": {
-      "__id__": 124
-    },
     "dialogSystem": {
       "__id__": 60
     },
     "player": {
-      "__id__": 143
+      "__id__": 148
+    },
+    "PunchGame": {
+      "__id__": 129
+    },
+    "tetris": {
+      "__id__": 150
     },
     "_id": "d3olmCjd9G3o4S5FYWEABD"
+  },
+  {
+    "__type__": "83085USrMRIN4GivIsbItfr",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 70
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "block": [
+      {
+        "__uuid__": "ec99b07f-9492-4524-81b8-0f1992a91913",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "fe826163-ef24-49c0-b04a-8ecf97311354",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "7ca6d49f-6453-43d6-a1cf-92b59554dd0a",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "c7b2a249-76c6-42a3-93cd-d7b73a62fd42",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "c3704646-7d22-4ba0-98c3-06b9b600b8a2",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "83dae4b5-d89b-4168-99da-6b523b071bda",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "692c73fa-cf1b-4a3f-806a-1168023114bd",
+        "__expectedType__": "cc.Prefab"
+      }
+    ],
+    "background": {
+      "__id__": 69
+    },
+    "gameNode": {
+      "__id__": 123
+    },
+    "enemyHealth": {
+      "__id__": 130
+    },
+    "blockLength": 30,
+    "_id": "f6Y2RfHbBFnJbP+GX+r80h"
   },
   {
     "__type__": "7d090+5cEVBgKUTrsnP9ExP",
@@ -5082,7 +5316,7 @@
     },
     "targetClicks": 24,
     "playerHealth": {
-      "__id__": 141
+      "__id__": 146
     },
     "damagePerClick": 100,
     "holeNode": [
@@ -5129,7 +5363,7 @@
     "line": 4,
     "cross": 4,
     "playerHealth": {
-      "__id__": 141
+      "__id__": 146
     },
     "damagePerTile": 100,
     "spaceX": 60,
@@ -5152,7 +5386,7 @@
       "__id__": 119
     },
     "playerHealth": {
-      "__id__": 141
+      "__id__": 146
     },
     "damage": 100,
     "hatNumber": 3,
@@ -5256,10 +5490,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 152
+        "__id__": 158
       },
       {
-        "__id__": 153
+        "__id__": 159
       }
     ],
     "_prefab": null,
@@ -5296,7 +5530,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 151
+      "__id__": 157
     },
     "_enabled": true,
     "__prefab": null,
@@ -5317,7 +5551,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 151
+      "__id__": 157
     },
     "_enabled": true,
     "__prefab": null,
@@ -5360,25 +5594,25 @@
     },
     "_children": [
       {
-        "__id__": 155
+        "__id__": 161
       },
       {
-        "__id__": 158
+        "__id__": 164
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 161
+        "__id__": 167
       },
       {
-        "__id__": 162
+        "__id__": 168
       },
       {
-        "__id__": 163
+        "__id__": 169
       },
       {
-        "__id__": 164
+        "__id__": 170
       }
     ],
     "_prefab": null,
@@ -5415,16 +5649,16 @@
     "_name": "Bar",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 154
+      "__id__": 160
     },
     "_children": [],
     "_active": true,
     "_components": [
       {
-        "__id__": 156
+        "__id__": 162
       },
       {
-        "__id__": 157
+        "__id__": 163
       }
     ],
     "_prefab": null,
@@ -5461,7 +5695,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 155
+      "__id__": 161
     },
     "_enabled": true,
     "__prefab": null,
@@ -5482,7 +5716,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 155
+      "__id__": 161
     },
     "_enabled": true,
     "__prefab": null,
@@ -5521,16 +5755,16 @@
     "_name": "Health",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 154
+      "__id__": 160
     },
     "_children": [],
     "_active": true,
     "_components": [
       {
-        "__id__": 159
+        "__id__": 165
       },
       {
-        "__id__": 160
+        "__id__": 166
       }
     ],
     "_prefab": null,
@@ -5567,7 +5801,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 158
+      "__id__": 164
     },
     "_enabled": true,
     "__prefab": null,
@@ -5588,7 +5822,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 158
+      "__id__": 164
     },
     "_enabled": true,
     "__prefab": null,
@@ -5627,7 +5861,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 154
+      "__id__": 160
     },
     "_enabled": true,
     "__prefab": null,
@@ -5648,7 +5882,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 154
+      "__id__": 160
     },
     "_enabled": true,
     "__prefab": null,
@@ -5687,12 +5921,12 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 154
+      "__id__": 160
     },
     "_enabled": true,
     "__prefab": null,
     "_barSprite": {
-      "__id__": 157
+      "__id__": 163
     },
     "_mode": 0,
     "_totalLength": 250,
@@ -5705,15 +5939,15 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 154
+      "__id__": 160
     },
     "_enabled": true,
     "__prefab": null,
     "health": {
-      "__id__": 125
+      "__id__": 130
     },
     "healthText": {
-      "__id__": 160
+      "__id__": 166
     },
     "_id": "61bOwAGCxK0ZDb7jNkIpg2"
   },
@@ -5752,7 +5986,7 @@
     "enemyMaxHealth": 2000,
     "enemyCurrHealth": 2000,
     "enemySprite": {
-      "__id__": 153
+      "__id__": 159
     },
     "_id": "f0EXH2kB9N2r71EvGLyV1W"
   },
@@ -5766,13 +6000,13 @@
     "_enabled": true,
     "__prefab": null,
     "magicHat": {
-      "__id__": 147
+      "__id__": 153
     },
     "link": {
-      "__id__": 146
+      "__id__": 152
     },
     "whac_a_mole": {
-      "__id__": 145
+      "__id__": 151
     },
     "dialogSystem": {
       "__id__": 60
@@ -5786,19 +6020,19 @@
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 170
+      "__id__": 176
     },
     "shadows": {
-      "__id__": 171
+      "__id__": 177
     },
     "_skybox": {
-      "__id__": 172
+      "__id__": 178
     },
     "fog": {
-      "__id__": 173
+      "__id__": 179
     },
     "octree": {
-      "__id__": 174
+      "__id__": 180
     }
   },
   {

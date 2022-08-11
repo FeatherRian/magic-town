@@ -1,14 +1,17 @@
 import { _decorator, Component, Node } from 'cc';
 import { Punch } from '../MiniGames/Punch/Punch';
+import { Tetris } from '../MiniGames/Tetris/Tetris';
 import { DialogSystem } from '../UI/DialogSystem';
 import { MiniGame, Player } from './Player';
 const { ccclass, property } = _decorator;
 
 @ccclass('PlayerAttack')
 export class PlayerAttack extends Component {
-    @property (Punch) PunchGame : Punch = null;
+    
     @property (DialogSystem) dialogSystem : DialogSystem = null;
-    @property(Player) player : Player = null;
+    @property (Player) player : Player = null;
+    @property (Punch) PunchGame : Punch = null;
+    @property (Tetris) tetris : Tetris = null;
 
     ChooseGame(){
         switch(this.player.playerAttack)
@@ -36,7 +39,7 @@ export class PlayerAttack extends Component {
     }
 
     Game2Start(){
-
+        this.dialogSystem.EnterDialog(0.05, ["进行俄罗斯方块，每回合获得5个方块"], this.tetris.GameStart.bind(this.tetris));
     }
 
     Game3Start(){
