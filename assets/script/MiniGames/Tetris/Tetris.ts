@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Prefab, Vec2, instantiate, v2, v3, input, Input, EventKeyboard, KeyCode, Label } from 'cc';
+import { _decorator, Component, Node, Prefab, Vec2, instantiate, v2, v3, input, Input, EventKeyboard, KeyCode, Label, Sprite } from 'cc';
 import { Health } from '../../UI/Health';
 const { ccclass, property } = _decorator;
 
@@ -11,21 +11,22 @@ export class Tetris extends Component {
     @property blockLength : number = 0;
     @property damagePerScore : number = 0;
     @property(Label) scoreLabel : Label = null;
+    @property shadowAlpha : number = 120;
 
     private box : Node[][] = [];
     private rand : number = 0;
 
     //当前的块
     private currentBlock: Node = null;
-    private currentBlockPart01: Node = null;
-    private currentBlockPart02: Node = null;
-    private currentBlockPart03: Node = null;
-    private currentBlockPart04: Node = null;
+    private currentBlockPart : Node[] = [];
     //当前块的位置
-    private currentBlockPart01Pos: Vec2 = null;
-    private currentBlockPart02Pos: Vec2 = null;
-    private currentBlockPart03Pos: Vec2 = null;
-    private currentBlockPart04Pos: Vec2 = null;
+    private currentBlockPartPos : Vec2[] = [];
+
+    //当前的块的投影
+    private shadowBlock: Node = null;
+    private shadowBlockPart : Node[] = [];
+    //当前块的投影的位置
+    private shadowBlockPartPos: Vec2[] = [];
 
     public gameStart : boolean = false;
     private remainBlock : number = 0;
@@ -49,6 +50,9 @@ export class Tetris extends Component {
     //             break;
     //     }
     // }
+    onLoad(){
+        
+    }
 
     update(){
         this.scoreLabel.string = "当前得分：" + this.score;
@@ -56,7 +60,6 @@ export class Tetris extends Component {
 
     GameStart(){
         // input.on(Input.EventType.KEY_DOWN, this.onKeyDown , this);
-
         this.background.active = true;
         this.gameNode.active = true;
         this.gameStart = true;
@@ -98,13 +101,16 @@ export class Tetris extends Component {
         this.rand = Math.floor(7 * Math.random());
         this.ChooseColor(this.rand);
         this.ChooseType(this.rand);
+
+        //同时创造对应的影子
+        this.BuildShadow();
+        this.ShadowDrop();
     }
 
     ChooseColor( rand : number ){
-        this.currentBlockPart01 = instantiate(this.block[rand]);
-        this.currentBlockPart02 = instantiate(this.block[rand]);
-        this.currentBlockPart03 = instantiate(this.block[rand]);
-        this.currentBlockPart04 = instantiate(this.block[rand]);
+        for (let i = 1; i <= 4 ; i++){
+            this.currentBlockPart[i] = instantiate(this.block[rand]);
+        }
         this.currentBlock = new Node();
         this.gameNode.addChild(this.currentBlock);
 
@@ -138,148 +144,143 @@ export class Tetris extends Component {
                 this.currentBlock.setPosition(this.blockLength * 0.5 , this.blockLength * 7.5);
                 break;
         }
-
-        this.currentBlock.addChild(this.currentBlockPart01);
-        this.currentBlock.addChild(this.currentBlockPart02);
-        this.currentBlock.addChild(this.currentBlockPart03);
-        this.currentBlock.addChild(this.currentBlockPart04);
+        
+        for (let i = 1; i <= 4 ; i++){
+            this.currentBlock.addChild(this.currentBlockPart[i]);
+        }
 
     }
 
     ChooseType(rand : number){
         if (rand == 0) {
             //正方形右上
-            this.currentBlockPart01.setPosition(this.blockLength * 0.5 , this.blockLength * 0.5);
-            this.currentBlockPart01Pos = v2(18, 5);  //初始化当前块的位置，相对于currentBlock
+            this.currentBlockPart[1].setPosition(this.blockLength * 0.5 , this.blockLength * 0.5);
+            this.currentBlockPartPos[1] = v2(18, 5);  //初始化当前块的位置，相对于currentBlock
             //正方形左上
-            this.currentBlockPart02.setPosition(-this.blockLength * 0.5 , this.blockLength * 0.5);
-            this.currentBlockPart02Pos = v2(18, 4);
+            this.currentBlockPart[2].setPosition(-this.blockLength * 0.5 , this.blockLength * 0.5);
+            this.currentBlockPartPos[2] = v2(18, 4);
             //正方形右下
-            this.currentBlockPart03.setPosition(this.blockLength * 0.5 , -this.blockLength * 0.5);
-            this.currentBlockPart03Pos = v2(17, 5);
+            this.currentBlockPart[3].setPosition(this.blockLength * 0.5 , -this.blockLength * 0.5);
+            this.currentBlockPartPos[3] = v2(17, 5);
             //正方形左下
-            this.currentBlockPart04.setPosition(-this.blockLength * 0.5 , -this.blockLength * 0.5);
-            this.currentBlockPart04Pos = v2(17, 4);
+            this.currentBlockPart[4].setPosition(-this.blockLength * 0.5 , -this.blockLength * 0.5);
+            this.currentBlockPartPos[4] = v2(17, 4);
         }
         //创建Z字形
         if (rand == 1) {
             //Z字形左
-            this.currentBlockPart01.setPosition(-this.blockLength, 0);
-            this.currentBlockPart01Pos = v2(18, 4);  //初始化当前块的位置，相对于currentBlock
+            this.currentBlockPart[1].setPosition(-this.blockLength, 0);
+            this.currentBlockPartPos[1] = v2(18, 4);  //初始化当前块的位置，相对于currentBlock
             //Z字形中
-            this.currentBlockPart02.setPosition(0, 0);
-            this.currentBlockPart02Pos = v2(18, 5);
+            this.currentBlockPart[2].setPosition(0, 0);
+            this.currentBlockPartPos[2] = v2(18, 5);
             //Z字形下
-            this.currentBlockPart03.setPosition(0, -this.blockLength);
-            this.currentBlockPart03Pos = v2(17, 5);
+            this.currentBlockPart[3].setPosition(0, -this.blockLength);
+            this.currentBlockPartPos[3] = v2(17, 5);
             //Z字形右
-            this.currentBlockPart04.setPosition(this.blockLength, -this.blockLength);
-            this.currentBlockPart04Pos = v2(17, 6);
+            this.currentBlockPart[4].setPosition(this.blockLength, -this.blockLength);
+            this.currentBlockPartPos[4] = v2(17, 6);
         }
         //创建左L型
         if (rand == 2) {
             //左L形上
-            this.currentBlockPart01.setPosition(0, this.blockLength);
-            this.currentBlockPart01Pos = v2(19, 5);  //初始化当前块的位置，相对于currentBlock
+            this.currentBlockPart[1].setPosition(0, this.blockLength);
+            this.currentBlockPartPos[1] = v2(19, 5);  //初始化当前块的位置，相对于currentBlock
             //左L形中
-            this.currentBlockPart02.setPosition(0, 0);
-            this.currentBlockPart02Pos = v2(18, 5);
+            this.currentBlockPart[2].setPosition(0, 0);
+            this.currentBlockPartPos[2] = v2(18, 5);
             //左L形下
-            this.currentBlockPart03.setPosition(0, -this.blockLength);
-            this.currentBlockPart03Pos = v2(17, 5);
+            this.currentBlockPart[3].setPosition(0, -this.blockLength);
+            this.currentBlockPartPos[3] = v2(17, 5);
             //Z字形右
-            this.currentBlockPart04.setPosition(this.blockLength, -this.blockLength);
-            this.currentBlockPart04Pos = v2(17, 6);
+            this.currentBlockPart[4].setPosition(this.blockLength, -this.blockLength);
+            this.currentBlockPartPos[4] = v2(17, 6);
         }
         //创建右L型
         if (rand == 3) {
             //右L型上
-            this.currentBlockPart01.setPosition(0, this.blockLength);
-            this.currentBlockPart01Pos = v2(19, 5);  //初始化当前块的位置，相对于currentBlock
+            this.currentBlockPart[1].setPosition(0, this.blockLength);
+            this.currentBlockPartPos[1] = v2(19, 5);  //初始化当前块的位置，相对于currentBlock
             //右L型中
-            this.currentBlockPart02.setPosition(0, 0);
-            this.currentBlockPart02Pos = v2(18, 5);
+            this.currentBlockPart[2].setPosition(0, 0);
+            this.currentBlockPartPos[2] = v2(18, 5);
             //右L型下
-            this.currentBlockPart03.setPosition(0, -this.blockLength);
-            this.currentBlockPart03Pos = v2(17, 5);
+            this.currentBlockPart[3].setPosition(0, -this.blockLength);
+            this.currentBlockPartPos[3] = v2(17, 5);
             //右L型左
-            this.currentBlockPart04.setPosition(-this.blockLength, -this.blockLength);
-            this.currentBlockPart04Pos = v2(17, 4);
+            this.currentBlockPart[4].setPosition(-this.blockLength, -this.blockLength);
+            this.currentBlockPartPos[4] = v2(17, 4);
         }
         //创建反Z型
         if (rand == 4) {
             //反Z形右
-            this.currentBlockPart01.setPosition(this.blockLength, 0);
-            this.currentBlockPart01Pos = v2(18, 6);  //初始化当前块的位置，相对于currentBlock
+            this.currentBlockPart[1].setPosition(this.blockLength, 0);
+            this.currentBlockPartPos[1] = v2(18, 6);  //初始化当前块的位置，相对于currentBlock
             //反Z形中
-            this.currentBlockPart02.setPosition(0, 0);
-            this.currentBlockPart02Pos = v2(18, 5);
+            this.currentBlockPart[2].setPosition(0, 0);
+            this.currentBlockPartPos[2] = v2(18, 5);
             //反Z形下
-            this.currentBlockPart03.setPosition(0, -this.blockLength);
-            this.currentBlockPart03Pos = v2(17, 5);
+            this.currentBlockPart[3].setPosition(0, -this.blockLength);
+            this.currentBlockPartPos[3] = v2(17, 5);
             //反Z形左
-            this.currentBlockPart04.setPosition(-this.blockLength, -this.blockLength);
-            this.currentBlockPart04Pos = v2(17, 4);
+            this.currentBlockPart[4].setPosition(-this.blockLength, -this.blockLength);
+            this.currentBlockPartPos[4] = v2(17, 4);
         }
         //创建长条型
         if (rand == 5) {
             //长条型上上
-            this.currentBlockPart01.setPosition(0, this.blockLength * 2);
-            this.currentBlockPart01Pos = v2(19, 5);  //初始化当前块的位置，相对于currentBlock
+            this.currentBlockPart[1].setPosition(0, this.blockLength * 2);
+            this.currentBlockPartPos[1] = v2(19, 5);  //初始化当前块的位置，相对于currentBlock
             //长条型上
-            this.currentBlockPart02.setPosition(0, this.blockLength);
-            this.currentBlockPart02Pos = v2(18, 5);
+            this.currentBlockPart[2].setPosition(0, this.blockLength);
+            this.currentBlockPartPos[2] = v2(18, 5);
             //长条型中
-            this.currentBlockPart03.setPosition(0, 0);
-            this.currentBlockPart03Pos = v2(17, 5);
+            this.currentBlockPart[3].setPosition(0, 0);
+            this.currentBlockPartPos[3] = v2(17, 5);
             //长条型下
-            this.currentBlockPart04.setPosition(0, -this.blockLength);
-            this.currentBlockPart04Pos = v2(16, 5);
+            this.currentBlockPart[4].setPosition(0, -this.blockLength);
+            this.currentBlockPartPos[4] = v2(16, 5);
         }
         //创建T字形
         if (rand == 6) {
             //T字形上
-            this.currentBlockPart01.setPosition(0, this.blockLength);
-            this.currentBlockPart01Pos = v2(18, 5);  //初始化当前块的位置，相对于currentBlock
+            this.currentBlockPart[1].setPosition(0, this.blockLength);
+            this.currentBlockPartPos[1] = v2(18, 5);  //初始化当前块的位置，相对于currentBlock
             //T字形左
-            this.currentBlockPart02.setPosition(-this.blockLength, 0);
-            this.currentBlockPart02Pos = v2(17, 4);
+            this.currentBlockPart[2].setPosition(-this.blockLength, 0);
+            this.currentBlockPartPos[2] = v2(17, 4);
             //T字形中
-            this.currentBlockPart03.setPosition(0, 0);
-            this.currentBlockPart03Pos = v2(17, 5);
+            this.currentBlockPart[3].setPosition(0, 0);
+            this.currentBlockPartPos[3] = v2(17, 5);
             //T字形右
-            this.currentBlockPart04.setPosition(this.blockLength, 0);
-            this.currentBlockPart04Pos = v2(17, 6);
+            this.currentBlockPart[4].setPosition(this.blockLength, 0);
+            this.currentBlockPartPos[4] = v2(17, 6);
         }
 
         this.CheckCurrentBlockPos();
     }
 
     CheckCurrentBlockPos() {
-         console.log(this.currentBlockPart01Pos);
-        this.box[this.currentBlockPart01Pos.x][this.currentBlockPart01Pos.y] = this.currentBlockPart01;
-        this.box[this.currentBlockPart02Pos.x][this.currentBlockPart02Pos.y] = this.currentBlockPart02;
-        this.box[this.currentBlockPart03Pos.x][this.currentBlockPart03Pos.y] = this.currentBlockPart03;
-        this.box[this.currentBlockPart04Pos.x][this.currentBlockPart04Pos.y] = this.currentBlockPart04;
-         console.log(this.box[this.currentBlockPart01Pos.x][this.currentBlockPart01Pos.y]);
+        for (let i = 1; i <= 4 ; i++){
+            this.box[this.currentBlockPartPos[i].x][this.currentBlockPartPos[i].y] = this.currentBlockPart[i];
+        }
     }
 
     DeleteCurrentBlockPos() {
-        // console.log(this.currentBlockPart01Pos);
-        this.box[this.currentBlockPart01Pos.x][this.currentBlockPart01Pos.y] = null;
-        this.box[this.currentBlockPart02Pos.x][this.currentBlockPart02Pos.y] = null;
-        this.box[this.currentBlockPart03Pos.x][this.currentBlockPart03Pos.y] = null;
-        this.box[this.currentBlockPart04Pos.x][this.currentBlockPart04Pos.y] = null;
-        // console.log(this.box[this.currentBlockPart01Pos.x][this.currentBlockPart01Pos.y]);
+        for (let i = 1; i <= 4 ; i++){
+            this.box[this.currentBlockPartPos[i].x][this.currentBlockPartPos[i].y] = null;
+        }
     }
 
     AutoDown() {
         this.autoDown = () => {
             //一直下落直到碰到下边界
             if (this.isClashBottom()) {
+                console.log("isClashBottom");
                 this.deleteRow();   //行消除检测
                 this.BuildBlock();  //创建新的方块集合
             } else if (this.isClashBlockDown()) {   //一直下落直到碰到其他方块
+                console.log("isClashBlockDown");
                 this.isGameOver();  //判断游戏是否结束
                 if (!this.gameStart) return;
                 this.deleteRow();
@@ -287,10 +288,9 @@ export class Tetris extends Component {
             } else {
                 this.currentBlock.setPosition(v3(this.currentBlock.position.x , this.currentBlock.position.y - this.blockLength));
                 this.DeleteCurrentBlockPos();
-                this.currentBlockPart01Pos.x -= 1;
-                this.currentBlockPart02Pos.x -= 1;
-                this.currentBlockPart03Pos.x -= 1;
-                this.currentBlockPart04Pos.x -= 1;
+                for (let i = 1; i <= 4 ; i++){
+                    this.currentBlockPartPos[i].x -= 1;
+                }
                 this.CheckCurrentBlockPos();
             }
         }
@@ -303,11 +303,12 @@ export class Tetris extends Component {
        
         this.currentBlock.setPosition(v3(this.currentBlock.position.x - this.blockLength , this.currentBlock.position.y));
         this.DeleteCurrentBlockPos();
-        this.currentBlockPart01Pos.y -= 1;
-        this.currentBlockPart02Pos.y -= 1;
-        this.currentBlockPart03Pos.y -= 1;
-        this.currentBlockPart04Pos.y -= 1;
+        for (let i = 1; i <= 4 ; i++){
+            this.currentBlockPartPos[i].y -= 1;
+        }
         this.CheckCurrentBlockPos();
+
+        this.ShadowDrop();
     }
 
     RightButton(){
@@ -316,11 +317,12 @@ export class Tetris extends Component {
        
         this.currentBlock.setPosition(v3(this.currentBlock.position.x + this.blockLength , this.currentBlock.position.y));
         this.DeleteCurrentBlockPos();
-        this.currentBlockPart01Pos.y += 1;
-        this.currentBlockPart02Pos.y += 1;
-        this.currentBlockPart03Pos.y += 1;
-        this.currentBlockPart04Pos.y += 1;
+        for (let i = 1; i <= 4 ; i++){
+            this.currentBlockPartPos[i].y += 1;
+        }
         this.CheckCurrentBlockPos();
+
+        this.ShadowDrop();
     }
 
     UpButton(){
@@ -335,27 +337,29 @@ export class Tetris extends Component {
         }
 
         this.CheckCurrentBlockPos();
+
+        this.ShadowDrop();
     }
 
     isKickWallLeft(){
-        if (this.box[this.currentBlockPart01Pos.x][this.currentBlockPart01Pos.y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart01Pos.x][this.currentBlockPart01Pos.y]) ||
-            this.box[this.currentBlockPart02Pos.x][this.currentBlockPart02Pos.y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart02Pos.x][this.currentBlockPart02Pos.y]) ||
-            this.box[this.currentBlockPart03Pos.x][this.currentBlockPart03Pos.y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart03Pos.x][this.currentBlockPart03Pos.y]) ||
-            this.box[this.currentBlockPart04Pos.x][this.currentBlockPart04Pos.y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart04Pos.x][this.currentBlockPart04Pos.y]) ||
-            this.currentBlockPart01Pos.y  < 0 || this.currentBlockPart02Pos.y  < 0 ||
-            this.currentBlockPart03Pos.y  < 0 || this.currentBlockPart04Pos.y  < 0) {
+        if (this.box[this.currentBlockPartPos[1].x][this.currentBlockPartPos[1].y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[1].x][this.currentBlockPartPos[1].y]) ||
+            this.box[this.currentBlockPartPos[2].x][this.currentBlockPartPos[2].y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[2].x][this.currentBlockPartPos[2].y]) ||
+            this.box[this.currentBlockPartPos[3].x][this.currentBlockPartPos[3].y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[3].x][this.currentBlockPartPos[3].y]) ||
+            this.box[this.currentBlockPartPos[4].x][this.currentBlockPartPos[4].y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[4].x][this.currentBlockPartPos[4].y]) ||
+            this.currentBlockPartPos[1].y  < 0 || this.currentBlockPartPos[2].y  < 0 ||
+            this.currentBlockPartPos[3].y  < 0 || this.currentBlockPartPos[4].y  < 0) {
             return true;
         }
         return false;
     }
 
     isKickWallRight(){
-        if (this.box[this.currentBlockPart01Pos.x][this.currentBlockPart01Pos.y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart01Pos.x][this.currentBlockPart01Pos.y]) ||
-            this.box[this.currentBlockPart02Pos.x][this.currentBlockPart02Pos.y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart02Pos.x][this.currentBlockPart02Pos.y]) ||
-            this.box[this.currentBlockPart03Pos.x][this.currentBlockPart03Pos.y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart03Pos.x][this.currentBlockPart03Pos.y]) ||
-            this.box[this.currentBlockPart04Pos.x][this.currentBlockPart04Pos.y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart04Pos.x][this.currentBlockPart04Pos.y]) ||
-            this.currentBlockPart01Pos.y  > 9 || this.currentBlockPart02Pos.y  > 9 ||
-            this.currentBlockPart03Pos.y  > 9 || this.currentBlockPart04Pos.y  > 9){
+        if (this.box[this.currentBlockPartPos[1].x][this.currentBlockPartPos[1].y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[1].x][this.currentBlockPartPos[1].y]) ||
+            this.box[this.currentBlockPartPos[2].x][this.currentBlockPartPos[2].y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[2].x][this.currentBlockPartPos[2].y]) ||
+            this.box[this.currentBlockPartPos[3].x][this.currentBlockPartPos[3].y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[3].x][this.currentBlockPartPos[3].y]) ||
+            this.box[this.currentBlockPartPos[4].x][this.currentBlockPartPos[4].y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[4].x][this.currentBlockPartPos[4].y]) ||
+            this.currentBlockPartPos[1].y  > 9 || this.currentBlockPartPos[2].y  > 9 ||
+            this.currentBlockPartPos[3].y  > 9 || this.currentBlockPartPos[4].y  > 9){
             return true;
         }
         return false;
@@ -366,79 +370,105 @@ export class Tetris extends Component {
         if (this.isClashBlockDown()) return;
         this.currentBlock.setPosition(v3(this.currentBlock.position.x , this.currentBlock.position.y - this.blockLength));
         this.DeleteCurrentBlockPos();
-        this.currentBlockPart01Pos.x -= 1;
-        this.currentBlockPart02Pos.x -= 1;
-        this.currentBlockPart03Pos.x -= 1;
-        this.currentBlockPart04Pos.x -= 1;
+        for (let i = 1; i <= 4 ; i++){
+            this.currentBlockPartPos[i].x -= 1;
+        }
         this.CheckCurrentBlockPos();
     }
 
     //判断是否即将碰撞到左边界
     isClashLeft(): boolean {
-        if (this.currentBlockPart01Pos.y - 1 < 0 || this.currentBlockPart02Pos.y - 1 < 0 ||
-            this.currentBlockPart03Pos.y - 1 < 0 || this.currentBlockPart04Pos.y - 1 < 0) {
-            return true;
+        for (let i = 1 ; i <= 4 ; i++){
+            if (this.currentBlockPartPos[i].y - 1 < 0) return true;
         }
+        // if (this.currentBlockPartPos[1].y - 1 < 0 || this.currentBlockPartPos[2].y - 1 < 0 ||
+        //     this.currentBlockPartPos[3].y - 1 < 0 || this.currentBlockPartPos[4].y - 1 < 0) {
+        //     return true;
+        // }
         return false;
     }
 
     //判断是否即将碰撞到右边界 
     isClashRight(): boolean {
-        if (this.currentBlockPart01Pos.y + 1 > 9 || this.currentBlockPart02Pos.y + 1 > 9 ||
-            this.currentBlockPart03Pos.y + 1 > 9 || this.currentBlockPart04Pos.y + 1 > 9) {
-            return true;
+        for (let i = 1 ; i <= 4 ; i++){
+            if (this.currentBlockPartPos[i].y + 1 > 9) return true;
         }
+        // if (this.currentBlockPartPos[1].y + 1 > 9 || this.currentBlockPartPos[2].y + 1 > 9 ||
+        //     this.currentBlockPartPos[3].y + 1 > 9 || this.currentBlockPartPos[4].y + 1 > 9) {
+        //     return true;
+        // }
         return false;
     }
 
     //判断是否即将碰撞到下边界
     isClashBottom(): boolean {
-        if (this.currentBlockPart01Pos.x - 1 < 0 || this.currentBlockPart02Pos.x - 1 < 0 ||
-            this.currentBlockPart03Pos.x - 1 < 0 || this.currentBlockPart04Pos.x - 1 < 0) {
-            return true;
+        for (let i = 1 ; i <= 4 ; i++){
+            if (this.currentBlockPartPos[i].x - 1 < 0) return true;
         }
+        // if (this.currentBlockPartPos[1].x - 1 < 0 || this.currentBlockPartPos[2].x - 1 < 0 ||
+        //     this.currentBlockPartPos[3].x - 1 < 0 || this.currentBlockPartPos[4].x - 1 < 0) {
+        //     return true;
+        // }
         return false;
     }
 
     //判断是否即将碰撞到其他方块（下）
     isClashBlockDown(): boolean {
         //向下检测方块碰撞
-        if (this.box[this.currentBlockPart01Pos.x - 1][this.currentBlockPart01Pos.y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart01Pos.x - 1][this.currentBlockPart01Pos.y]) ||
-            this.box[this.currentBlockPart02Pos.x - 1][this.currentBlockPart02Pos.y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart02Pos.x - 1][this.currentBlockPart02Pos.y]) ||
-            this.box[this.currentBlockPart03Pos.x - 1][this.currentBlockPart03Pos.y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart03Pos.x - 1][this.currentBlockPart03Pos.y]) ||
-            this.box[this.currentBlockPart04Pos.x - 1][this.currentBlockPart04Pos.y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart04Pos.x - 1][this.currentBlockPart04Pos.y])) {
-            return true;
+        for (let i = 1 ; i <= 4 ; i++){
+            if (this.box[this.currentBlockPartPos[i].x - 1][this.currentBlockPartPos[i].y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[i].x - 1][this.currentBlockPartPos[i].y])){
+                return true;
+            }
         }
+        
+        // if (this.box[this.currentBlockPartPos[1].x - 1][this.currentBlockPartPos[1].y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[1].x - 1][this.currentBlockPartPos[1].y]) ||
+        //     this.box[this.currentBlockPartPos[2].x - 1][this.currentBlockPartPos[2].y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[2].x - 1][this.currentBlockPartPos[2].y]) ||
+        //     this.box[this.currentBlockPartPos[3].x - 1][this.currentBlockPartPos[3].y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[3].x - 1][this.currentBlockPartPos[3].y]) ||
+        //     this.box[this.currentBlockPartPos[4].x - 1][this.currentBlockPartPos[4].y] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[4].x - 1][this.currentBlockPartPos[4].y])) {
+        //     return true;
+        // }
         return false;
     }
 
     //判断是否即将碰撞到其他方块（左）
     isClashBlockLeft() {
         //向左检测方块碰撞
-        if (this.box[this.currentBlockPart01Pos.x][this.currentBlockPart01Pos.y - 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart01Pos.x][this.currentBlockPart01Pos.y - 1]) ||
-            this.box[this.currentBlockPart02Pos.x][this.currentBlockPart02Pos.y - 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart02Pos.x][this.currentBlockPart02Pos.y - 1]) ||
-            this.box[this.currentBlockPart03Pos.x][this.currentBlockPart03Pos.y - 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart03Pos.x][this.currentBlockPart03Pos.y - 1]) ||
-            this.box[this.currentBlockPart04Pos.x][this.currentBlockPart04Pos.y - 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart04Pos.x][this.currentBlockPart04Pos.y - 1])) {
-            return true;
+        for (let i = 1 ; i <= 4 ; i++){
+            if (this.box[this.currentBlockPartPos[i].x][this.currentBlockPartPos[i].y - 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[i].x][this.currentBlockPartPos[i].y - 1])){
+                return true;
+            }
         }
+        
+        // if (this.box[this.currentBlockPartPos[1].x][this.currentBlockPartPos[1].y - 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[1].x][this.currentBlockPartPos[1].y - 1]) ||
+        //     this.box[this.currentBlockPartPos[2].x][this.currentBlockPartPos[2].y - 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[2].x][this.currentBlockPartPos[2].y - 1]) ||
+        //     this.box[this.currentBlockPartPos[3].x][this.currentBlockPartPos[3].y - 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[3].x][this.currentBlockPartPos[3].y - 1]) ||
+        //     this.box[this.currentBlockPartPos[4].x][this.currentBlockPartPos[4].y - 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[4].x][this.currentBlockPartPos[4].y - 1])) {
+        //     return true;
+        // }
         return false;
     }
 
     //判断是否即将碰撞到其他方块（右）
     isClashBlockRight() {
         //向右检测方块碰撞
-        if (this.box[this.currentBlockPart01Pos.x][this.currentBlockPart01Pos.y + 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart01Pos.x][this.currentBlockPart01Pos.y + 1]) ||
-            this.box[this.currentBlockPart02Pos.x][this.currentBlockPart02Pos.y + 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart02Pos.x][this.currentBlockPart02Pos.y + 1]) ||
-            this.box[this.currentBlockPart03Pos.x][this.currentBlockPart03Pos.y + 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart03Pos.x][this.currentBlockPart03Pos.y + 1]) ||
-            this.box[this.currentBlockPart04Pos.x][this.currentBlockPart04Pos.y + 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPart04Pos.x][this.currentBlockPart04Pos.y + 1])) {
-            return true;
+        for (let i = 1 ; i <= 4 ; i++){
+            if (this.box[this.currentBlockPartPos[i].x][this.currentBlockPartPos[i].y + 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[i].x][this.currentBlockPartPos[i].y + 1])){
+                return true;
+            }
         }
+
+        // if (this.box[this.currentBlockPartPos[1].x][this.currentBlockPartPos[1].y + 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[1].x][this.currentBlockPartPos[1].y + 1]) ||
+        //     this.box[this.currentBlockPartPos[2].x][this.currentBlockPartPos[2].y + 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[2].x][this.currentBlockPartPos[2].y + 1]) ||
+        //     this.box[this.currentBlockPartPos[3].x][this.currentBlockPartPos[3].y + 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[3].x][this.currentBlockPartPos[3].y + 1]) ||
+        //     this.box[this.currentBlockPartPos[4].x][this.currentBlockPartPos[4].y + 1] != null && !this.isCurrentBlockChild(this.box[this.currentBlockPartPos[4].x][this.currentBlockPartPos[4].y + 1])) {
+        //     return true;
+        // }
         return false;
     }
 
     isCurrentBlockChild(judgeObj: Node): boolean {
         for (let i = 0; i < 4; i++) {
-            if (judgeObj === this.currentBlock.children[i]) {
+            if (judgeObj === this.currentBlock.children[i] || judgeObj === this.shadowBlock.children[i]) {
                 return true;
             }
         }
@@ -446,10 +476,13 @@ export class Tetris extends Component {
     }
 
     ChangeShape() {
-        this.whichPartChange(this.currentBlockPart01, this.currentBlockPart01Pos);
-        this.whichPartChange(this.currentBlockPart02, this.currentBlockPart02Pos);
-        this.whichPartChange(this.currentBlockPart03, this.currentBlockPart03Pos);
-        this.whichPartChange(this.currentBlockPart04, this.currentBlockPart04Pos);
+        for (let i = 1 ; i <= 4 ; i++){
+            this.whichPartChange(this.currentBlockPart[i], this.currentBlockPartPos[i]);
+        }
+        // this.whichPartChange(this.currentBlockPart[1], this.currentBlockPartPos[1]);
+        // this.whichPartChange(this.currentBlockPart[2], this.currentBlockPartPos[2]);
+        // this.whichPartChange(this.currentBlockPart[3], this.currentBlockPartPos[3]);
+        // this.whichPartChange(this.currentBlockPart[4], this.currentBlockPartPos[4]);
     }
 
     //传入被判断的部分
@@ -699,6 +732,68 @@ export class Tetris extends Component {
         
         this.enemyHealth.injured(this.score * this.damagePerScore);
 
+    }
+
+    Drop(){
+        while(!this.isClashBottom() && !this.isClashBlockDown()){
+            this.DownButton();
+        }
+    }
+
+    BuildShadow(){
+        this.shadowBlock = new Node();
+        this.gameNode.addChild(this.shadowBlock);
+        this.shadowBlock.setPosition(this.currentBlock.position);
+        for (let i = 1; i <= 4 ; i++){
+            this.shadowBlockPart[i] = instantiate(this.currentBlockPart[i]);
+            this.shadowBlockPart[i].getComponent(Sprite).color.set(255 , 255 , 255 ,this.shadowAlpha);
+            this.shadowBlock.addChild(this.shadowBlockPart[i]);
+            this.shadowBlockPart[i].setPosition(this.currentBlockPart[i].position);
+            this.shadowBlockPartPos[i] = this.currentBlockPartPos[i].clone();
+        }
+    }
+
+    ShadowDrop(){
+        this.shadowBlock.setPosition(this.currentBlock.position);
+        for (let i = 1; i <= 4 ; i++){
+            this.shadowBlockPartPos[i] = this.currentBlockPartPos[i].clone();
+        }
+
+        while (!this.isShadowClashBottom() && !this.isShadowClashBlockDown()){
+            this.shadowBlock.setPosition(v3(this.shadowBlock.position.x , this.shadowBlock.position.y - this.blockLength));
+            for (let i = 1; i <= 4 ; i++){
+                this.shadowBlockPartPos[i].x -= 1;
+                // console.log(this.shadowBlockPartPos[i]);
+            }
+        }
+        
+    }
+
+    isShadowClashBottom(): boolean {
+        for (let i = 1 ; i <= 4 ; i++){
+            if (this.shadowBlockPartPos[i].x - 1 < 0) return true;
+        }
+        return false;
+    }
+
+    //判断是否即将碰撞到其他方块（下）
+    isShadowClashBlockDown(): boolean {
+        //向下检测方块碰撞
+        for (let i = 1 ; i <= 4 ; i++){
+            if (this.box[this.shadowBlockPartPos[i].x - 1][this.shadowBlockPartPos[i].y] != null && !this.isShadowBlockChild(this.box[this.shadowBlockPartPos[i].x - 1][this.shadowBlockPartPos[i].y])){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    isShadowBlockChild(judgeObj: Node): boolean {
+        for (let i = 0; i < 4; i++) {
+            if (judgeObj === this.shadowBlock.children[i] || judgeObj === this.currentBlock.children[i]) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
