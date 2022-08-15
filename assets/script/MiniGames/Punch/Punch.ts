@@ -86,7 +86,7 @@ export class Punch extends Component {
         this.background.active = false;
         this.gameNode.active = false;
         this.gameStart = false;
-        this.enemyHealth.injured(this.currPunches * this.damagePerPunch);
+        this.enemyHealth.injured(this.currPunches * this.damagePerPunch , true);
     }
 }
 

@@ -27,7 +27,7 @@ export class Health extends Component {
 
 
 
-    injured(damage:number){
+    injured(damage:number  , endTheRound : boolean){
         if (this.currentHealth <= damage){
             this.currentHealth = 0;
             if (this.node.name == "Player"){
@@ -39,9 +39,11 @@ export class Health extends Component {
                 this.dialogSystem.EnterDialog(0.05 , [this.playerNode.getComponent(Player).playerName+"对"+this.enemyNode.getComponent(Enemy).enemyName+"造成"+damage+"点伤害并击败了他"]);
             }
             this.death();
+            return;
         }
-        else{
-            this.currentHealth -= damage;
+
+        this.currentHealth -= damage;
+        if (endTheRound){
             if (this.node.name == "Player"){
                 //console.log(this);
                 this.dialogSystem.EnterDialog(0.05 , [this.playerNode.getComponent(Player).playerName+"受到"+this.enemyNode.getComponent(Enemy).enemyName+"的"+damage+"点伤害"] , this.roundSystem.PlayerRoundBegin.bind(this.roundSystem));
@@ -49,6 +51,15 @@ export class Health extends Component {
             if (this.node.name == "Enemy"){
                 //console.log(this);
                 this.dialogSystem.EnterDialog(0.05 , [this.playerNode.getComponent(Player).playerName+"对"+this.enemyNode.getComponent(Enemy).enemyName+"造成"+damage+"点伤害"] , this.roundSystem.EnemyRoundBegin.bind(this.roundSystem));
+            }
+        } else {
+            if (this.node.name == "Player"){
+                //console.log(this);
+                this.dialogSystem.EnterDialog(0.05 , [this.playerNode.getComponent(Player).playerName+"受到"+this.enemyNode.getComponent(Enemy).enemyName+"的"+damage+"点伤害"] );
+            }
+            if (this.node.name == "Enemy"){
+                //console.log(this);
+                this.dialogSystem.EnterDialog(0.05 , [this.playerNode.getComponent(Player).playerName+"对"+this.enemyNode.getComponent(Enemy).enemyName+"造成"+damage+"点伤害"] );
             }
         }
     }

@@ -708,7 +708,7 @@ export class Tetris extends Component {
         this.background.active = false;
         this.gameNode.active = false;
         
-        this.enemyHealth.injured(this.score * this.damagePerScore);
+        this.enemyHealth.injured(this.score * this.damagePerScore , true);
     }
 
     ExitGame(){
@@ -730,7 +730,7 @@ export class Tetris extends Component {
         this.gameNode.active = false;
         this.gameStart = false;
         
-        this.enemyHealth.injured(this.score * this.damagePerScore);
+        this.enemyHealth.injured(this.score * this.damagePerScore , true);
 
     }
 

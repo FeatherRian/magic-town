@@ -1,6 +1,7 @@
 import { _decorator, Component, Node } from 'cc';
 import { Punch } from '../MiniGames/Punch/Punch';
 import { Tetris } from '../MiniGames/Tetris/Tetris';
+import { Wand } from '../MiniGames/Wand/Wand';
 import { DialogSystem } from '../UI/DialogSystem';
 import { MiniGame, Player } from './Player';
 const { ccclass, property } = _decorator;
@@ -12,6 +13,7 @@ export class PlayerAttack extends Component {
     @property (Player) player : Player = null;
     @property (Punch) PunchGame : Punch = null;
     @property (Tetris) tetris : Tetris = null;
+    @property (Wand) wand : Wand = null;
 
     ChooseGame(){
         switch(this.player.playerAttack)
@@ -47,7 +49,11 @@ export class PlayerAttack extends Component {
     }
 
     Game3Start(){
-
+        if (this.wand.gameStart){
+            this.dialogSystem.EnterDialog(0.05, ["继续魔杖施法"], this.wand.ThisRoundStart.bind(this.wand));
+        } else {
+            this.dialogSystem.EnterDialog(0.05, ["开始魔杖施法"], this.wand.GameStart.bind(this.wand));
+        }
     }
 
     Game4Start(){

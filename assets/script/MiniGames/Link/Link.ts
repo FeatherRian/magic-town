@@ -80,7 +80,7 @@ export class Link extends Component {
         this.background.active = false;
         this.gameNode.active = false;
         this.gameStart = false;
-        this.playerHealth.injured(this.remainTile * this.damagePerTile);
+        this.playerHealth.injured(this.remainTile * this.damagePerTile , true);
     }
 
     InitBoard(){

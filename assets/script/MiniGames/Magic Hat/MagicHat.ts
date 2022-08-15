@@ -148,7 +148,7 @@ export class MagicHat extends Component {
         this.background.active = false;
         this.gameNode.active = false;
         this.gameStart = false;
-        this.playerHealth.injured(this.damage * this.gameWin);
+        this.playerHealth.injured(this.damage * this.gameWin , true);
     }
 }
 

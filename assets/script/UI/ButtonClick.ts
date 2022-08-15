@@ -30,6 +30,12 @@ export class ButtonClick extends Component {
         this.CommunicateButton.interactable = this.roundSystem.actionable;
         this.ItemsButton.interactable = this.roundSystem.actionable;
         this.EscapeButton.interactable = this.roundSystem.actionable;
+
+        //test
+        this.AttackButton.node.active = this.roundSystem.actionable;
+        this.CommunicateButton.node.active = this.roundSystem.actionable;
+        this.ItemsButton.node.active = this.roundSystem.actionable;
+        this.EscapeButton.node.active = this.roundSystem.actionable;
     }
 
     Attack(){

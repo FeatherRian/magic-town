@@ -76,7 +76,7 @@ export class Whac_a_mole extends Component {
         this.background.active = false;
         this.gameNode.active = false;
         this.gameStart = false;
-        this.playerHealth.injured((this.targetClicks-this.currClicks) * this.damagePerClick);
+        this.playerHealth.injured((this.targetClicks-this.currClicks) * this.damagePerClick , true);
     }
 }
 
